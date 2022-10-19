@@ -1,7 +1,7 @@
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 function useMap(domRef) {
   const init: Map = new Map({
