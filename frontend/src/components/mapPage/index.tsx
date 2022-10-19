@@ -1,9 +1,14 @@
 import React, { useRef, useState } from "react";
 import useMap from "../../hook/useMap";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/store";
+import Typography from "@mui/material/Typography";
+import { Box } from "@mui/material";
 
 function MapPage() {
   const mapRef = useRef(null);
   const mapObj = useMap(mapRef);
+  const user = useSelector((s: RootState) => s.user);
 
   function zoomIn() {
     if (!mapObj) return;
@@ -24,23 +29,58 @@ function MapPage() {
   }
 
   return (
-    <div
-      className="App"
-      style={{
-        position: "relative",
-        zIndex: 100,
-        minHeight: "100vh",
-      }}
-    >
-      <div ref={mapRef} id="map">
-        <button onClick={() => zoomIn()} id={"zoom-in"}>
-          Zoom-In
-        </button>
-        <button onClick={() => zoomOut()} id={"zoom-out"}>
-          Zoom-Out
-        </button>
+    <>
+      <Box style={{ display: "flex", height: 100, alignItems: "flex-end", gap: 10 }}>
+        <Typography
+          variant="h5"
+          component="p"
+          color={"black"}
+        >{`name: ${user.name}`}</Typography>
+        <Typography
+          variant="h5"
+          component="p"
+          color={"black"}
+        >{`email: ${user.email}`}</Typography>
+      </Box>
+      <div
+        style={{
+          position: "relative",
+          zIndex: 100,
+          minHeight: "100vh",
+          width: "100%",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 100,
+            right: 0,
+            top: 5,
+            display: "flex",
+            gap: 10,
+          }}
+        >
+          <button onClick={() => zoomIn()} id={"zoom-in"}>
+            Zoom-In
+          </button>
+          <button onClick={() => zoomOut()} id={"zoom-out"}>
+            Zoom-Out
+          </button>
+        </div>
+        <div
+          ref={mapRef}
+          id="map"
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 90,
+          }}
+        ></div>
       </div>
-    </div>
+    </>
   );
 }
 

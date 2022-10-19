@@ -1,17 +1,7 @@
 import "./App.css";
-import React, { useRef, useState } from "react";
-import { Map } from "ol";
-import useMap from "./hook/useMap";
+import React from "react";
 
-import {
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-  useLocation,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import MapPage from "./components/mapPage";
@@ -43,6 +33,11 @@ function App() {
         position: "relative",
         zIndex: 100,
         minHeight: "100vh",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column"
       }}
     >
       <Routes>

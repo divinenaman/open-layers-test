@@ -16,7 +16,10 @@ function Login() {
   const verifyLogin = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/verify");
+      const res = await axios.get("http://localhost:8000/verify", {
+        withCredentials: true,
+      });
+
       dispatch(
         setLogin({
           email: res.data.email,
@@ -25,7 +28,7 @@ function Login() {
         })
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     setLoading(false);
   };
@@ -33,10 +36,15 @@ function Login() {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:8000/login",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+
       dispatch(
         setLogin({
           email: res.data.email,
@@ -45,7 +53,7 @@ function Login() {
         })
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     setLoading(false);
   };
@@ -70,8 +78,7 @@ function Login() {
         alignContent: "center",
         flexDirection: "column",
         gap: 20,
-        height: "100vh",
-        width: "30vw",
+        width: "min(90vw, 400px)",
       }}
     >
       {loading ? (
@@ -90,6 +97,7 @@ function Login() {
             id="outlined-required-2"
             label="Password"
             defaultValue=""
+            type={"password"}
           />
           <Button variant="contained" onClick={() => login("s", "s")}>
             Login
