@@ -4,6 +4,7 @@ from unicodedata import name
 from pydantic import BaseModel
 from fastapi import FastAPI, Response, Cookie
 from datetime import datetime, timezone, timedelta
+from fastapi.middleware.cors import CORSMiddleware
 
 import repo.user as userRepo
 import utils.jwt as jwt
@@ -24,6 +25,13 @@ class SignUp(BaseModel):
 
 secret = "secret"
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/login")
 async def login(login: Login, response: Response):
@@ -43,7 +51,7 @@ async def login(login: Login, response: Response):
     return res
 
 
-@ app.post("/verify")
+@ app.get("/verify")
 def verify(t: Union[str, None]=Cookie(default=None)):
     if t == None:
         return {"status": False}
