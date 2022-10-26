@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import MapPage from "./components/mapPage";
 import Login from "./components/login";
+import Signup from "./components/signup";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   let auth = useSelector((s: RootState) => s.user);
@@ -37,7 +38,7 @@ function App() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
     >
       <Routes>
@@ -54,6 +55,14 @@ function App() {
           element={
             <RequireNotAuth>
               <Login />
+            </RequireNotAuth>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <RequireNotAuth>
+              <Signup />
             </RequireNotAuth>
           }
         />

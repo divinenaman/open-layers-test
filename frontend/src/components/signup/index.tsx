@@ -1,75 +1,43 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { setLogin } from "../../slices/user";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 
-function Login() {
+function Signup() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
+    name: "",
     email: "",
     password: "",
   });
   const user = useSelector((s: RootState) => s.user);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const verifyLogin = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("http://localhost:8000/verify", {
-        withCredentials: true,
-      });
+  const signup = async (name: string, email: string, password: string) => {
+    if (!name || !email || !password) return;
 
-      dispatch(
-        setLogin({
-          email: res.data.email,
-          name: res.data.name,
-          isLoggedIn: true,
-        })
-      );
-    } catch (e) {
-      console.error(e);
-    }
-    setLoading(false);
-  };
-
-  const login = async (email: string, password: string) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:8000/login",
+        "http://localhost:8000/signup",
         {
+          name,
           email,
           password,
         },
         { withCredentials: true }
       );
 
-      dispatch(
-        setLogin({
-          email: res.data.email,
-          name: res.data.name,
-          isLoggedIn: true,
-        })
-      );
+      navigate("/login", { replace: true });
     } catch (e) {
       console.error(e);
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    console.log(user);
-    if (user.isLoggedIn) {
-      // nav
-      navigate("/", { replace: true });
-    }
-  }, [user.isLoggedIn]);
 
   return (
     <div
@@ -86,7 +54,16 @@ function Login() {
         <p>Loading</p>
       ) : (
         <>
-          <Typography color="black">Login</Typography>
+          <Typography color="black">Sign Up</Typography>
+          <TextField
+            required
+            id="outlined-required-1"
+            label="Name"
+            defaultValue=""
+            style={{ color: "white" }}
+            value={data.name}
+            onChange={(e) => setData((d) => ({ ...d, name: e.target.value }))}
+          />
           <TextField
             required
             id="outlined-required-1"
@@ -109,7 +86,7 @@ function Login() {
           />
           <Button
             variant="contained"
-            onClick={() => login(data.email, data.password)}
+            onClick={() => signup(data.name, data.email, data.password)}
           >
             Login
           </Button>
@@ -119,4 +96,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
