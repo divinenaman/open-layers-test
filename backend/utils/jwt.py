@@ -12,17 +12,17 @@ class jwt_payload:
 def encode(payload, secret):
     try:
         t = jwt.encode(payload, secret, algorithm='HS256')
-        return {"error": False, "payload": t}
+        return (t, False)
 
     except Exception as e:
-        return {"error": True}
+        return (None, True)
 
 
 def decode(s, secret):
 
     try:
         res = jwt.decode(s, secret, algorithms=["HS256"])
-        return {"error": False, "payload": res}
+        return (res, False)
 
     except jwt.ExpiredSignatureError:
-        return {"error": True}
+        return (None, True)

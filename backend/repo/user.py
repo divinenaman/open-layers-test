@@ -1,14 +1,28 @@
 
+async def getUserUsingEmail(db, email, password):
+    mycursor = db.cursor()
 
+    sql = "SELECT name, email FROM login WHERE email = %s AND password = %s"
+    val = (email, password)
+    mycursor.execute(sql, val)
 
-async def getUserUsingEmail(email, password):
+    myresult = mycursor.fetchone()
 
-    # get user from db
+    if myresult == None:
+        return (None, True)
 
-    return { "error": False, "name": "naman", "email": "namanddev7@gmail.com" }
+    return (myresult , False)
 
-async def addUser(email, password, name):
+async def addUser(db, email, password, name):
 
-    # add user
+    mycursor = db.cursor()
 
-    return { "error": False }
+    sql = "INSERT INTO login (name, email, password) VALUES (%s, %s, %s)"
+    val = (name, email, password)
+    mycursor.execute(sql, val)
+
+    db.commit()
+
+    err = mycursor.rowcount > 0
+    return (None, err)
+    
